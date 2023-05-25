@@ -7,33 +7,35 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateTaskDto } from './dtos/createTaskDto';
-import { UpdateTaskDto } from './dtos';
+import { TaskService } from './task.service';
+import { CreateTaskDto, UpdateTaskDto } from './dtos';
 
 @Controller('tasks')
 export class TaskController {
+  constructor(private taskService: TaskService) {}
+
   @Get()
   getTasks() {
-    return '';
+    this.taskService.getTasks();
   }
 
   @Get(':id')
   getTask(@Param('id') id: string) {
-    return id;
+    this.taskService.getTask();
   }
 
   @Post()
   createTask(@Body() createTaskDto: CreateTaskDto) {
-    return createTaskDto;
+    this.taskService.createTask();
   }
 
   @Put(':id')
   updateTask(@Body() updateTaskDto: UpdateTaskDto, @Param(':id') id: string) {
-    return updateTaskDto + id;
+    this.taskService.updateTask();
   }
 
   @Delete(':id')
   deleteTask(@Param(':id') id: string) {
-    return id;
+    this.taskService.deleteTask();
   }
 }
