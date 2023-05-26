@@ -1,15 +1,16 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ListModule } from './list';
 import { TaskModule } from './task';
 import { LoggerMiddleWare } from './logger.middleware';
 import { TaskController } from './task/task.controller';
-import { PrismaService } from './prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [TaskModule],
+  imports: [TaskModule, PrismaModule, ListModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
