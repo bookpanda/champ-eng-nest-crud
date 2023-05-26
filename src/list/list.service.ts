@@ -9,9 +9,7 @@ export class ListService {
 
   async create(dto: CreateListDto) {
     const list = await this.prisma.list.create({
-      data: {
-        ...dto,
-      },
+      data: { ...dto },
     });
     return list;
   }
@@ -28,11 +26,16 @@ export class ListService {
     });
   }
 
-  async update(id: number, updateListDto: UpdateListDto) {
-    return `This action updates a #${id} list`;
+  async update(id: number, dto: UpdateListDto) {
+    const list = await this.prisma.list.update({
+      where: { id },
+      data: { ...dto },
+    });
+    return list;
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} list`;
+    const list = await this.prisma.list.delete({ where: { id } });
+    return list;
   }
 }

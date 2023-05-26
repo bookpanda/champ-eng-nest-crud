@@ -3,10 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseIntPipe,
+  Put,
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto, UpdateListDto } from './dto';
@@ -30,13 +30,16 @@ export class ListController {
     return this.listService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateListDto: UpdateListDto) {
-    return this.listService.update(+id, updateListDto);
+  @Put(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateListDto: UpdateListDto,
+  ) {
+    return this.listService.update(id, updateListDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.listService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.listService.remove(id);
   }
 }
