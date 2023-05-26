@@ -10,7 +10,9 @@ import {
 import { TaskService } from './task.service';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
 import { ParseIdPipe, ValidationPipe } from 'src/pipes';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('tasks')
 @Controller('tasks')
 export class TaskController {
   constructor(private taskService: TaskService) {}

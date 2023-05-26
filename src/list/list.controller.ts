@@ -10,7 +10,9 @@ import {
 import { ListService } from './list.service';
 import { CreateListDto, UpdateListDto } from './dto';
 import { ParseIdPipe, ValidationPipe } from 'src/pipes';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('lists')
 @Controller('lists')
 export class ListController {
   constructor(private readonly listService: ListService) {}
