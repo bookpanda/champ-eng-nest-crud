@@ -2,7 +2,7 @@ import { NestMiddleware } from '@nestjs/common';
 import { NextFunction } from 'express';
 
 export class LoggerMiddleWare implements NestMiddleware {
-  use(next: NextFunction) {
+  use(req: Request, res: Response, next: NextFunction) {
     console.log('Task Request...');
     next();
   }

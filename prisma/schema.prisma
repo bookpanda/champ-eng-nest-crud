@@ -12,7 +12,7 @@ model Task {
   description String?
   dueDate     String
   order       Int
-  list        List    @relation(fields: [listID], references: [id])
+  list        List    @relation(fields: [listID], references: [id], onDelete: Cascade)
   listID      Int
 }
 
