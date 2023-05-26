@@ -16,7 +16,7 @@ export class TaskController {
 
   @Get()
   getTasks() {
-    this.taskService.getTasks();
+    return this.taskService.getTasks();
   }
 
   @Get(':id')
