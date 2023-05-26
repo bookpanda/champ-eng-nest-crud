@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
 import { ListNotFoundException } from 'src/list/exceptions/list-not-found.exception';
+import { TaskNotFoundException } from './exceptions/task-not-found.exception';
 
 @Injectable()
 export class TaskService {
@@ -19,6 +20,9 @@ export class TaskService {
   }
 
   async findOne(id: number) {
+    if (await this.checkNotFound(id)) {
+      throw new TaskNotFoundException(id);
+    }
     return await this.prisma.task.findFirst({
       where: {
         id,
@@ -30,9 +34,12 @@ export class TaskService {
     const list = await this.prisma.list.findFirst({
       where: { id: dto.listID },
     });
-
     if (!list) {
       throw new ListNotFoundException(dto.listID);
+    }
+
+    if (await this.checkNotFound(id)) {
+      throw new TaskNotFoundException(id);
     }
     const task = await this.prisma.task.update({
       where: { id },
@@ -42,7 +49,14 @@ export class TaskService {
   }
 
   async remove(id: number) {
+    if (await this.checkNotFound(id)) {
+      throw new TaskNotFoundException(id);
+    }
     const task = await this.prisma.task.delete({ where: { id } });
     return task;
+  }
+
+  async checkNotFound(id: number) {
+    return (await this.prisma.task.count({ where: { id } })) === 0;
   }
 }
