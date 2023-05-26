@@ -4,20 +4,20 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
+import { ParseIdPipe, ValidationPipe } from 'src/pipes';
 
 @Controller('tasks')
 export class TaskController {
   constructor(private taskService: TaskService) {}
 
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    this.taskService.create(createTaskDto);
+  create(@Body(ValidationPipe) createTaskDto: CreateTaskDto) {
+    return this.taskService.create(createTaskDto);
   }
 
   @Get()
@@ -26,20 +26,20 @@ export class TaskController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    this.taskService.findOne(id);
+  findOne(@Param('id', ParseIdPipe) id: number) {
+    return this.taskService.findOne(id);
   }
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateTaskDto: UpdateTaskDto,
+    @Param('id', ParseIdPipe) id: number,
+    @Body(ValidationPipe) updateTaskDto: UpdateTaskDto,
   ) {
-    this.taskService.update(id, updateTaskDto);
+    return this.taskService.update(id, updateTaskDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    this.taskService.remove(id);
+  remove(@Param('id', ParseIdPipe) id: number) {
+    return this.taskService.remove(id);
   }
 }

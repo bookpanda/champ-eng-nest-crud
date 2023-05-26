@@ -5,18 +5,18 @@ import {
   Body,
   Param,
   Delete,
-  ParseIntPipe,
   Put,
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto, UpdateListDto } from './dto';
+import { ParseIdPipe, ValidationPipe } from 'src/pipes';
 
-@Controller('list')
+@Controller('lists')
 export class ListController {
   constructor(private readonly listService: ListService) {}
 
   @Post()
-  create(@Body() createListDto: CreateListDto) {
+  create(@Body(ValidationPipe) createListDto: CreateListDto) {
     return this.listService.create(createListDto);
   }
 
@@ -26,20 +26,20 @@ export class ListController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id', ParseIdPipe) id: number) {
     return this.listService.findOne(id);
   }
 
   @Put(':id')
   update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateListDto: UpdateListDto,
+    @Param('id', ParseIdPipe) id: number,
+    @Body(ValidationPipe) updateListDto: UpdateListDto,
   ) {
     return this.listService.update(id, updateListDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id', ParseIdPipe) id: number) {
     return this.listService.remove(id);
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
+import { ListNotFoundException } from 'src/list/exceptions/list-not-found.exception';
 
 @Injectable()
 export class TaskService {
@@ -26,6 +27,13 @@ export class TaskService {
   }
 
   async update(id: number, dto: UpdateTaskDto) {
+    const list = await this.prisma.list.findFirst({
+      where: { id: dto.listID },
+    });
+
+    if (!list) {
+      throw new ListNotFoundException(dto.listID);
+    }
     const task = await this.prisma.task.update({
       where: { id },
       data: { ...dto },
