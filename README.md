@@ -1,5 +1,5 @@
 
-# ChAMP SWE Track Backend Assignment (NestJS)
+# ChAMP SWE Track Backend Assignment (NestJS 🦁)
 
 ## Installation
 First, create .env from .env.template, no need to change values of variables.
