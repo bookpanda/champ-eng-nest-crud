@@ -37,20 +37,39 @@ describe('ListService Integration', () => {
   });
 
   describe('update and delete', () => {
-    const dto: UpdateListDto = {
-      title: 'Housework',
-      order: 2,
-    };
-    it('should create a list', async () => {
+    let prevOrder: number;
+    let prevTitle: string;
+    it('should update a list (update title and order)', async () => {
+      const dto: UpdateListDto = {
+        title: 'Housework',
+        order: 2,
+      };
       const list = await listService.update(id, dto);
       expect(list.title).toBe(dto.title);
       expect(list.order).toBe(dto.order);
+      prevTitle = list.title;
+    });
+    it('should update a list (update order)', async () => {
+      const dto: UpdateListDto = {
+        order: 4,
+      };
+      const list = await listService.update(id, dto);
+      expect(list.title).toBe(prevTitle);
+      expect(list.order).toBe(dto.order);
+      prevOrder = list.order;
+    });
+    it('should update a list', async () => {
+      const dto: UpdateListDto = {
+        title: 'Guitar',
+      };
+      const list = await listService.update(id, dto);
+      expect(list.title).toBe(dto.title);
+      expect(list.order).toBe(prevOrder);
     });
 
     it('should delete a list', async () => {
       await listService.remove(id);
-      const list = await prisma.list.count({ where: { id } });
-      expect(list).toBe(0);
+      expect(await prisma.list.count({ where: { id } })).toBe(0);
     });
   });
 });
