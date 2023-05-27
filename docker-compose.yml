@@ -13,6 +13,20 @@ services:
       - 5432:5432
     volumes:
       - postgres-db:/var/lib/postgresql/data
+  test-db:
+    image: postgres:alpine
+    env_file:
+      - .env.test
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres-test-db:/var/lib/postgresql/data
+
 
 volumes:
   postgres-db:
+  postgres-test-db:

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { ListNotFoundException } from './exceptions/list-not-found.exception';
+import { PrismaService } from 'src/prisma';
 
 @Injectable()
 export class ListService {
