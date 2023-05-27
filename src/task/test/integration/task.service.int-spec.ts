@@ -49,28 +49,28 @@ describe('TaskService Integration', () => {
     it('should create a task in list 1', async () => {
       const dto: CreateTaskDto = {
         description: 'Calculus II Paisarn',
-        dueDate: new Date(),
+        dueDate: new Date().toISOString(),
         order: 1,
         listID: listID_1,
       };
       const task = await taskService.create(dto);
       taskID_1 = task.id;
       expect(task.description).toBe(dto.description);
-      expect(task.dueDate).toStrictEqual(dto.dueDate);
+      expect(task.dueDate).toBe(dto.dueDate);
       expect(task.order).toBe(dto.order);
       expect(task.listID).toBe(dto.listID);
     });
     it('should create a task in list 2', async () => {
       const dto: CreateTaskDto = {
-        description: 'Create tests for taskService',
-        dueDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+        description: undefined,
+        dueDate: undefined,
         order: 2,
         listID: listID_2,
       };
       const task = await taskService.create(dto);
       taskID_2 = task.id;
-      expect(task.description).toBe(dto.description);
-      expect(task.dueDate).toStrictEqual(dto.dueDate);
+      expect(task.description).toBe(null);
+      expect(task.dueDate).toBe(null);
       expect(task.order).toBe(dto.order);
       expect(task.listID).toBe(dto.listID);
     });
@@ -86,17 +86,19 @@ describe('TaskService Integration', () => {
   });
 
   describe('update task values', () => {
-    let prevDueDate: Date;
+    let prevDueDate: string;
     let prevOrder: number;
     it('should update a task (update description, dueDate, order)', async () => {
       const dto: UpdateTaskDto = {
         description: 'Read Minano Nihongo',
-        dueDate: new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000),
+        dueDate: new Date(
+          new Date().getTime() + 5 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         order: 4,
       };
       const task = await taskService.update(taskID_1, dto);
       expect(task.description).toBe(dto.description);
-      expect(task.dueDate).toStrictEqual(dto.dueDate);
+      expect(task.dueDate).toBe(dto.dueDate);
       expect(task.order).toBe(dto.order);
       prevDueDate = task.dueDate;
       prevOrder = task.order;
@@ -107,7 +109,7 @@ describe('TaskService Integration', () => {
       };
       const task = await taskService.update(taskID_1, dto);
       expect(task.description).toBe(dto.description);
-      expect(task.dueDate).toStrictEqual(prevDueDate);
+      expect(task.dueDate).toBe(prevDueDate);
       expect(task.order).toBe(prevOrder);
     });
   });
@@ -116,13 +118,13 @@ describe('TaskService Integration', () => {
     it('should move task 1 to list 2', async () => {
       const dto: UpdateTaskDto = {
         description: 'Sleep',
-        dueDate: new Date(),
+        dueDate: new Date().toISOString(),
         order: 1,
         listID: listID_2,
       };
       const task = await taskService.update(taskID_1, dto);
       expect(task.description).toBe(dto.description);
-      expect(task.dueDate).toStrictEqual(dto.dueDate);
+      expect(task.dueDate).toBe(dto.dueDate);
       expect(task.order).toBe(dto.order);
       expect(task.listID).toBe(dto.listID);
       expect(await prisma.task.count({ where: { listID: listID_1 } })).toBe(0);

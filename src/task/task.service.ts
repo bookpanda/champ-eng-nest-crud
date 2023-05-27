@@ -3,12 +3,25 @@ import { PrismaService } from 'src/prisma';
 import { CreateTaskDto, UpdateTaskDto } from './dto';
 import { ListNotFoundException } from 'src/list/exceptions/list-not-found.exception';
 import { TaskNotFoundException } from './exceptions/task-not-found.exception';
+import { WrongDateFormatException } from './exceptions/wrong-date-format.exception';
+import { Task } from '@prisma/client';
 
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateTaskDto) {
+    if (dto.dueDate !== undefined && isNaN(Date.parse(dto.dueDate))) {
+      throw new WrongDateFormatException(dto.dueDate);
+    }
+
+    const list = await this.prisma.list.findFirst({
+      where: { id: dto.listID },
+    });
+    if (!list) {
+      throw new ListNotFoundException(dto.listID);
+    }
+
     const task = await this.prisma.task.create({
       data: { ...dto },
     });
@@ -31,6 +44,9 @@ export class TaskService {
   }
 
   async update(id: number, dto: UpdateTaskDto) {
+    if (dto.dueDate !== undefined && isNaN(Date.parse(dto.dueDate))) {
+      throw new WrongDateFormatException(dto.dueDate);
+    }
     const list = await this.prisma.list.findFirst({
       where: { id: dto.listID },
     });
@@ -41,6 +57,7 @@ export class TaskService {
     if (await this.checkNotFound(id)) {
       throw new TaskNotFoundException(id);
     }
+
     const task = await this.prisma.task.update({
       where: { id },
       data: { ...dto },
