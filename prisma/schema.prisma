@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Task {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   description String?
-  dueDate     String
+  dueDate     DateTime?
   order       Int
-  list        List    @relation(fields: [listID], references: [id], onDelete: Cascade)
+  list        List      @relation(fields: [listID], references: [id], onDelete: Cascade)
   listID      Int
 }
 
