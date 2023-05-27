@@ -32,14 +32,8 @@ $ npx prisma studio
 ## Test
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+# integration tests
+$ pnpm test:int
 ```
 
 ## API Documentation
